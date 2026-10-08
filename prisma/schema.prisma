@@ -1,0 +1,29 @@
+// B4Fire Technology — Prisma schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Inbound leads from the instant-quote calculator and the contact form.
+model Lead {
+  id           String   @id @default(cuid())
+  ref          String   @unique // human-friendly reference e.g. B4F-8F3K2
+  name         String
+  phone        String
+  email        String?
+  company      String?
+  services     String // comma-separated service keys selected in the quote wizard
+  propertyType String?
+  sizeSqm      Int?
+  urgency      String? // "emergency" | "urgent" | "planning"
+  estimateMin  Int? // estimated budget range lower bound (ZAR)
+  estimateMax  Int? // estimated budget range upper bound (ZAR)
+  message      String?
+  source       String   @default("quote_modal") // "quote_modal" | "contact_form"
+  status       String   @default("new") // "new" | "contacted" | "quoted" | "closed"
+  createdAt    DateTime @default(now())
+}
