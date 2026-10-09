@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQuote } from "@/components/b4fire/quote-context";
+import { useLanguage } from "@/components/b4fire/language-context";
 import { COMPANY, HERO_STATS } from "@/lib/b4fire-data";
 import { Button } from "@/components/ui/button";
 import { Flame, Siren, ShieldCheck, MapPin, ChevronDown } from "lucide-react";
@@ -49,6 +50,7 @@ function StatItem({ value, suffix, label, started }: { value: number; suffix: st
 
 export default function Hero() {
   const { openQuote } = useQuote();
+  const { t } = useLanguage();
   const [statsStarted, setStatsStarted] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
 
@@ -90,29 +92,28 @@ export default function Hero() {
           {/* compliance eyebrow */}
           <p className="mb-5 inline-flex flex-wrap items-center gap-2 rounded-full border border-flame/30 bg-flame/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-flame">
             <Flame className="h-3.5 w-3.5 animate-flame" aria-hidden="true" />
-            PSIRA Registered · SAQCC Fire Certified
+            {t.hero.badge}
           </p>
 
           <h1
             id="hero-heading"
             className="text-4xl font-extrabold leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-[3.4rem]"
           >
-            Certified <span className="text-flame-gradient">Fire &amp; Security</span> Protection for
-            Business and Home.
+            {t.hero.h1a} <span className="text-flame-gradient">{t.hero.h1b}</span> {t.hero.h1c}
           </h1>
 
           <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
-            SANS &amp; SAQCC compliant fire detection, gas suppression, access control, and
-            maintenance for <span className="font-semibold text-slate-100">Cape Town &amp; the Western Cape</span> —
-            one accountable contractor for fire and electronic security.
+            {t.hero.subPre}
+            <span className="font-semibold text-slate-100">{t.hero.subHL}</span>
+            {t.hero.subPost}
           </p>
 
           {/* trust chips */}
-          <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-300" aria-label="Key assurances">
-            {["No call-out fee on signed SLAs", "Free compliance survey", "COC & sign-off included"].map((t) => (
-              <li key={t} className="inline-flex items-center gap-1.5">
+          <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-300" aria-label={t.hero.chipsAria}>
+            {t.hero.chips.map((c) => (
+              <li key={c} className="inline-flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4 text-flame" aria-hidden="true" />
-                {t}
+                {c}
               </li>
             ))}
           </ul>
@@ -124,7 +125,7 @@ export default function Hero() {
               size="lg"
               className="glow-flame h-13 bg-flame px-7 text-base font-extrabold text-white transition-transform hover:scale-[1.02] hover:bg-flame-dark focus-visible:outline-2 focus-visible:outline-orange-300"
             >
-              Get an Instant Quote
+              {t.hero.ctaPrimary}
             </Button>
             <Button
               asChild
@@ -134,14 +135,15 @@ export default function Hero() {
             >
               <a href={`tel:${COMPANY.phoneIntl}`}>
                 <Siren className="mr-2 h-5 w-5 animate-pulse-dot" aria-hidden="true" />
-                Emergency Response
+                {t.hero.ctaEmergency}
               </a>
             </Button>
           </div>
 
           <p className="mt-4 inline-flex items-center gap-1.5 text-xs text-slate-400">
             <MapPin className="h-3.5 w-3.5 text-flame" aria-hidden="true" />
-            {COMPANY.address} — mobile units across the Western Cape
+            {COMPANY.address}
+            {t.hero.addressSuffix}
           </p>
         </div>
 
@@ -150,19 +152,19 @@ export default function Hero() {
           ref={statsRef}
           className="mt-14 grid grid-cols-2 divide-navy-700/80 rounded-2xl border border-navy-700/70 bg-navy-900/70 backdrop-blur-md sm:grid-cols-4 sm:divide-x"
           role="group"
-          aria-label="Company key statistics"
+          aria-label={t.hero.statsAria}
         >
-          {HERO_STATS.map((s) => (
-            <StatItem key={s.label} value={s.value} suffix={s.suffix} label={s.label} started={statsStarted} />
+          {HERO_STATS.map((s, i) => (
+            <StatItem key={s.label} value={s.value} suffix={s.suffix} label={t.hero.stats[i]} started={statsStarted} />
           ))}
         </div>
 
         <Link
           href="#services"
           className="mt-10 inline-flex items-center gap-2 text-sm font-semibold text-slate-400 transition-colors hover:text-flame"
-          aria-label="Scroll down to services"
+          aria-label={t.hero.exploreAria}
         >
-          Explore our services
+          {t.hero.explore}
           <ChevronDown className="h-4 w-4 animate-bounce" aria-hidden="true" />
         </Link>
       </div>

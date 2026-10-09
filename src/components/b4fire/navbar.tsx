@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { B4FireLogo } from "@/components/b4fire/logo";
 import { useQuote } from "@/components/b4fire/quote-context";
+import { useLanguage, LanguageToggle } from "@/components/b4fire/language-context";
 import { COMPANY, NAV_LINKS } from "@/lib/b4fire-data";
 import { cn } from "@/lib/utils";
 import {
@@ -26,6 +27,7 @@ export default function Navbar() {
   const [active, setActive] = useState<string>("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const { openQuote } = useQuote();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -72,7 +74,7 @@ export default function Navbar() {
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-flame focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
       >
-        Skip to main content
+        {t.nav.skip}
       </a>
 
       <div className="mx-auto flex h-[72px] max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
@@ -89,42 +91,45 @@ export default function Navbar() {
               href={link.href}
               aria-current={active === link.href ? "true" : undefined}
               className={cn(
-                "rounded-md px-2.5 py-2 text-[13px] font-semibold transition-colors xl:px-3 xl:text-sm focus-visible:outline-2 focus-visible:outline-flame",
+                "rounded-md px-2.5 py-2 text-[13px] font-semibold whitespace-nowrap transition-colors xl:px-3 xl:text-sm focus-visible:outline-2 focus-visible:outline-flame",
                 active === link.href
                   ? "text-flame"
                   : "text-slate-300 hover:bg-white/5 hover:text-white"
               )}
             >
-              {link.label}
+              {t.nav.labels[link.href]}
             </Link>
           ))}
         </nav>
 
         <div className="ml-auto flex items-center gap-2 sm:gap-2.5">
+          {/* Language toggle — EN / AFR */}
+          <LanguageToggle className="hidden sm:flex" />
+
           {/* WhatsApp */}
           <a
             href={COMPANY.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden h-10 items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3.5 text-sm font-bold text-emerald-400 transition-colors hover:bg-emerald-500/20 focus-visible:outline-2 focus-visible:outline-emerald-400 xl:inline-flex"
-            aria-label="Chat with us on WhatsApp"
+            aria-label={t.nav.whatsappAria}
           >
             <MessageCircle className="h-4 w-4" aria-hidden="true" />
-            WhatsApp
+            {t.nav.whatsapp}
           </a>
 
           {/* Emergency pill — Phillip's real 24/7 line from b4fire.co.za */}
           <a
             href={`tel:${COMPANY.emergencyIntl}`}
             className="group inline-flex h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-alert px-3.5 text-sm font-bold text-white shadow-[0_4px_20px_-4px_rgba(220,38,38,0.6)] transition-all hover:bg-alert-dark focus-visible:outline-2 focus-visible:outline-red-400 sm:px-4"
-            aria-label={`24/7 emergency line (${COMPANY.emergencyName}): ${COMPANY.emergencyDisplay}`}
-            title="24/7 Emergency — Phillip"
+            aria-label={`${t.nav.emergency} — ${COMPANY.emergencyName}: ${COMPANY.emergencyDisplay}`}
+            title={t.nav.emergencyTitle}
           >
             <span className="relative flex h-2 w-2" aria-hidden="true">
               <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-white" />
             </span>
             <Phone className="h-4 w-4 transition-transform group-hover:rotate-12" aria-hidden="true" />
-            <span className="hidden xl:inline">24/7 Emergency</span>
+            <span className="hidden xl:inline">{t.nav.emergency}</span>
             <span className="font-mono tracking-tight">{COMPANY.emergencyDisplay}</span>
           </a>
 
@@ -134,7 +139,7 @@ export default function Navbar() {
             className="hidden h-10 shrink-0 bg-flame px-3.5 text-sm font-bold text-white hover:bg-flame-dark focus-visible:outline-2 focus-visible:outline-orange-400 lg:inline-flex"
           >
             <Zap className="mr-1.5 h-4 w-4" aria-hidden="true" />
-            Instant Quote
+            {t.nav.quote}
           </Button>
 
           {/* Mobile menu */}
@@ -142,7 +147,7 @@ export default function Navbar() {
             <SheetTrigger asChild>
               <button
                 className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-navy-700 bg-navy-800/80 text-slate-200 transition-colors hover:bg-navy-700 lg:hidden"
-                aria-label="Open navigation menu"
+                aria-label={t.nav.openMenu}
               >
                 <Menu className="h-5 w-5" aria-hidden="true" />
               </button>
@@ -166,10 +171,13 @@ export default function Navbar() {
                     onClick={() => setMobileOpen(false)}
                     className="rounded-lg px-3 py-3 text-base font-semibold text-slate-200 transition-colors hover:bg-white/5 hover:text-flame"
                   >
-                    {link.label}
+                    {t.nav.labels[link.href]}
                   </Link>
                 ))}
               </nav>
+              <div className="border-t border-navy-700 px-5 pt-4">
+                <LanguageToggle />
+              </div>
               <div className="space-y-2.5 px-5 pb-8">
                 <Button
                   onClick={() => {
@@ -179,7 +187,7 @@ export default function Navbar() {
                   className="w-full bg-flame font-bold text-white hover:bg-flame-dark"
                 >
                   <Zap className="mr-2 h-4 w-4" aria-hidden="true" />
-                  Get an Instant Quote
+                  {t.nav.mobileQuote}
                 </Button>
                 <a
                   href={COMPANY.whatsapp}
@@ -188,21 +196,22 @@ export default function Navbar() {
                   className="flex h-11 w-full items-center justify-center gap-2 rounded-md border border-emerald-500/40 bg-emerald-500/10 text-sm font-bold text-emerald-400"
                 >
                   <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                  WhatsApp Us
+                  {t.nav.mobileWhatsapp}
                 </a>
                 <a
                   href={`tel:${COMPANY.emergencyIntl}`}
                   className="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-alert text-sm font-bold text-white"
                 >
                   <Phone className="h-4 w-4" aria-hidden="true" />
-                  24/7 Emergency · {COMPANY.emergencyDisplay}
+                  {t.nav.emergency} · {COMPANY.emergencyDisplay}
                 </a>
                 <a
                   href={`tel:${COMPANY.phoneIntl}`}
                   className="flex h-11 w-full items-center justify-center gap-2 rounded-md border border-navy-700 bg-navy-800 text-sm font-bold text-slate-200"
                 >
                   <Phone className="h-4 w-4" aria-hidden="true" />
-                  Office · {COMPANY.phoneDisplay}
+                  {t.nav.mobileOffice}
+                  {COMPANY.phoneDisplay}
                 </a>
               </div>
             </SheetContent>

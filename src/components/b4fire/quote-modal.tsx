@@ -16,6 +16,7 @@ import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { SERVICES, QUOTE_BASE, PROPERTY_FACTORS, URGENCY_FACTORS } from "@/lib/b4fire-data";
+import { useLanguage } from "@/components/b4fire/language-context";
 import { cn } from "@/lib/utils";
 import {
   ArrowRight,
@@ -38,8 +39,6 @@ type Result = {
   estimateMax: number;
 };
 
-const STEPS = ["Services", "Property & timing", "Your details"];
-
 function formatZAR(n: number) {
   return "R " + Math.round(n).toLocaleString("en-ZA");
 }
@@ -53,6 +52,7 @@ export default function QuoteModal({
   onOpenChange: (open: boolean) => void;
   preselect?: QuotePreselection;
 }) {
+  const { t } = useLanguage();
   const [step, setStep] = useState<Step>(1);
   const [services, setServices] = useState<string[]>([]);
   const [propertyType, setPropertyType] = useState<string>("office");
@@ -124,11 +124,11 @@ export default function QuoteModal({
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Submission failed. Please try again.");
+      if (!res.ok) throw new Error(data?.error || t.quote.errSubmit);
       setResult({ ref: data.ref, estimateMin: data.estimateMin, estimateMax: data.estimateMax });
       setStep(3);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong. Please try again.");
+      setError(e instanceof Error ? e.message : t.quote.errGeneric);
     } finally {
       setSubmitting(false);
     }
@@ -148,10 +148,10 @@ export default function QuoteModal({
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-flame/15 text-flame">
               <Calculator className="h-4.5 w-4.5" aria-hidden="true" />
             </span>
-            Instant Quote Calculator
+            {t.quote.title}
           </DialogTitle>
           <DialogDescription className="text-slate-400 text-sm">
-            Indicative budget range in 60 seconds — a SANS-compliant survey confirms the final price.
+            {t.quote.desc}
           </DialogDescription>
         </DialogHeader>
 
@@ -159,14 +159,14 @@ export default function QuoteModal({
         <div className="px-6 pt-4 shrink-0">
           <div className="mb-2 flex items-center justify-between text-xs text-slate-400">
             <span aria-hidden="true">
-              Step {Math.min(step, 2)} of 2
+              {t.quote.stepWord} {Math.min(step, 2)} {t.quote.ofWord} 2
             </span>
-            <span>{result ? "Done" : STEPS[step - 1]}</span>
+            <span>{result ? t.quote.done : t.quote.steps[step - 1]}</span>
           </div>
           <Progress
             value={result ? 100 : step === 1 ? 40 : 80}
             className="h-1.5 bg-navy-700"
-            aria-label="Quote wizard progress"
+            aria-label={t.quote.progressAria}
           />
         </div>
 
@@ -174,9 +174,9 @@ export default function QuoteModal({
           {/* STEP 1 — services */}
           {step === 1 && !result && (
             <fieldset>
-              <legend className="sr-only">Select the services you need quoted</legend>
+              <legend className="sr-only">{t.quote.legendSr}</legend>
               <p className="mb-3 text-sm font-semibold text-slate-200">
-                What do you need quoted? <span className="text-flame">*</span>
+                {t.quote.needQuoted} <span className="text-flame">*</span>
               </p>
               <div className="grid gap-2 sm:grid-cols-2">
                 {SERVICES.map((s) => {
@@ -196,7 +196,7 @@ export default function QuoteModal({
                         checked={checked}
                         onCheckedChange={() => toggleService(s.key)}
                         className="mt-0.5 border-slate-500 data-[state=checked]:border-flame data-[state=checked]:bg-flame data-[state=checked]:text-navy-950"
-                        aria-label={s.title}
+                        aria-label={t.services.byKey[s.key].title}
                       />
                       <span className="flex items-start gap-2">
                         <Icon
@@ -208,10 +208,10 @@ export default function QuoteModal({
                         />
                         <span>
                           <span className="block text-sm font-semibold leading-tight">
-                            {s.title}
+                            {t.services.byKey[s.key].title}
                           </span>
                           <span className="mt-0.5 block text-xs text-slate-400">
-                            {QUOTE_BASE[s.key]?.label}
+                            {t.quote.baseLabels[s.key]}
                           </span>
                         </span>
                       </span>
@@ -226,9 +226,9 @@ export default function QuoteModal({
           {step === 2 && !result && (
             <div className="space-y-5">
               <div>
-                <Label className="text-sm font-semibold text-slate-200">Property type</Label>
-                <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3" role="radiogroup" aria-label="Property type">
-                  {Object.entries(PROPERTY_FACTORS).map(([key, p]) => (
+                <Label className="text-sm font-semibold text-slate-200">{t.quote.propertyLabel}</Label>
+                <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3" role="radiogroup" aria-label={t.quote.propertyLabel}>
+                  {Object.entries(PROPERTY_FACTORS).map(([key]) => (
                     <button
                       key={key}
                       type="button"
@@ -242,7 +242,7 @@ export default function QuoteModal({
                           : "border-navy-700 bg-navy-800/60 text-slate-300 hover:border-slate-500"
                       )}
                     >
-                      {p.label}
+                      {t.quote.property[key]}
                     </button>
                   ))}
                 </div>
@@ -250,7 +250,7 @@ export default function QuoteModal({
 
               <div>
                 <Label htmlFor="quote-size" className="text-sm font-semibold text-slate-200">
-                  Approximate area: <span className="text-flame">{sizeSqm} m²</span>
+                  {t.quote.areaPre} <span className="text-flame">{sizeSqm} m²</span>
                 </Label>
                 <Slider
                   id="quote-size"
@@ -260,18 +260,18 @@ export default function QuoteModal({
                   min={50}
                   max={5000}
                   step={50}
-                  aria-label="Approximate area in square metres"
+                  aria-label={t.quote.areaAria}
                 />
                 <div className="mt-1 flex justify-between text-[11px] text-slate-500">
-                  <span>50 m²</span>
-                  <span>5 000+ m²</span>
+                  <span>{t.quote.sizeMin}</span>
+                  <span>{t.quote.sizeMax}</span>
                 </div>
               </div>
 
               <div>
-                <Label className="text-sm font-semibold text-slate-200">How soon do you need it?</Label>
-                <div className="mt-2 space-y-2" role="radiogroup" aria-label="Urgency">
-                  {Object.entries(URGENCY_FACTORS).map(([key, u]) => (
+                <Label className="text-sm font-semibold text-slate-200">{t.quote.urgencyTitle}</Label>
+                <div className="mt-2 space-y-2" role="radiogroup" aria-label={t.quote.urgencyAria}>
+                  {Object.entries(URGENCY_FACTORS).map(([key]) => (
                     <button
                       key={key}
                       type="button"
@@ -285,8 +285,8 @@ export default function QuoteModal({
                           : "border-navy-700 bg-navy-800/60 hover:border-slate-500"
                       )}
                     >
-                      <span className="text-sm font-semibold">{u.label}</span>
-                      <span className="text-xs text-slate-400">{u.note}</span>
+                      <span className="text-sm font-semibold">{t.quote.urgency[key].label}</span>
+                      <span className="text-xs text-slate-400">{t.quote.urgency[key].note}</span>
                     </button>
                   ))}
                 </div>
@@ -299,13 +299,13 @@ export default function QuoteModal({
                   aria-live="polite"
                 >
                   <p className="text-xs font-semibold uppercase tracking-wider text-flame">
-                    Indicative budget range
+                    {t.quote.estimateLabel}
                   </p>
                   <p className="mt-1 text-2xl font-extrabold tracking-tight text-white">
                     {formatZAR(estimate.min)} – {formatZAR(estimate.max)}
                   </p>
                   <p className="mt-1 text-xs text-slate-400">
-                    Excl. VAT. Final quote confirmed after a free on-site survey.
+                    {t.quote.estimateNote}
                   </p>
                 </div>
               )}
@@ -317,22 +317,23 @@ export default function QuoteModal({
               <span className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
                 <PartyPopper className="h-7 w-7" aria-hidden="true" />
               </span>
-              <h3 className="text-xl font-extrabold text-white">Request received!</h3>
+              <h3 className="text-xl font-extrabold text-white">{t.quote.successTitle}</h3>
               <p className="mx-auto mt-2 max-w-sm text-sm text-slate-400">
-                Thanks {name.split(" ")[0]} — your reference is{" "}
-                <span className="font-mono font-bold text-flame">{result.ref}</span>. A certified
-                technician will call you on <span className="text-slate-200">{phone}</span> within{" "}
-                {urgency === "emergency" ? "2 working hours" : "one business day"}.
+                {t.quote.successA(name.split(" ")[0])}
+                <span className="font-mono font-bold text-flame">{result.ref}</span>
+                {t.quote.successB}
+                <span className="text-slate-200">{phone}</span>{" "}
+                {urgency === "emergency" ? t.quote.timingEmergency : t.quote.timingNormal}.
               </p>
               {(result.estimateMin || result.estimateMax) && (
                 <div className="mx-auto mt-4 max-w-sm rounded-xl border border-navy-700 bg-navy-800/70 p-4">
                   <p className="text-xs uppercase tracking-wider text-slate-400">
-                    Saved budget range
+                    {t.quote.savedRange}
                   </p>
                   <p className="mt-1 text-lg font-bold text-white">
                     {result.estimateMin && result.estimateMax
                       ? `${formatZAR(result.estimateMin)} – ${formatZAR(result.estimateMax)}`
-                      : "Custom scope"}
+                      : t.quote.customScope}
                   </p>
                 </div>
               )}
@@ -340,7 +341,7 @@ export default function QuoteModal({
                 className="mt-5 w-full bg-flame text-white hover:bg-flame-dark sm:w-auto"
                 onClick={() => onOpenChange(false)}
               >
-                Done
+                {t.quote.doneBtn}
               </Button>
             </div>
           )}
@@ -350,11 +351,11 @@ export default function QuoteModal({
         {/* contact details & submit footer pinned below the scroll area on step 2 */}
         {step === 2 && !result && (
           <div className="border-t border-navy-700 bg-navy-800/40 px-6 py-4">
-            <p className="mb-3 text-sm font-semibold text-slate-200">Where can we reach you?</p>
+            <p className="mb-3 text-sm font-semibold text-slate-200">{t.quote.reach}</p>
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <Label htmlFor="q-name" className="text-xs text-slate-400">
-                  Full name *
+                  {t.quote.qName}
                 </Label>
                 <Input
                   id="q-name"
@@ -367,7 +368,7 @@ export default function QuoteModal({
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="q-phone" className="text-xs text-slate-400">
-                  Mobile number *
+                  {t.quote.qPhone}
                 </Label>
                 <Input
                   id="q-phone"
@@ -381,7 +382,7 @@ export default function QuoteModal({
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="q-email" className="text-xs text-slate-400">
-                  Email
+                  {t.quote.qEmail}
                 </Label>
                 <Input
                   id="q-email"
@@ -395,7 +396,7 @@ export default function QuoteModal({
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="q-company" className="text-xs text-slate-400">
-                  Company (optional)
+                  {t.quote.qCompany}
                 </Label>
                 <Input
                   id="q-company"
@@ -420,7 +421,7 @@ export default function QuoteModal({
                 onClick={() => setStep(1)}
                 className="border-navy-700 bg-transparent text-slate-300 hover:bg-navy-800 hover:text-white"
               >
-                <ArrowLeft className="mr-1 h-4 w-4" aria-hidden="true" /> Back
+                <ArrowLeft className="mr-1 h-4 w-4" aria-hidden="true" /> {t.quote.back}
               </Button>
               <Button
                 onClick={submit}
@@ -430,18 +431,18 @@ export default function QuoteModal({
                 {submitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-                    Sending…
+                    {t.quote.sending}
                   </>
                 ) : (
                   <>
                     <ShieldCheck className="mr-2 h-4 w-4" aria-hidden="true" />
-                    Get My Free Quote
+                    {t.quote.submit}
                   </>
                 )}
               </Button>
             </div>
             <p className="mt-2 text-center text-[11px] text-slate-500">
-              No spam. Your details are only used to prepare your quote.
+              {t.quote.noSpam}
             </p>
           </div>
         )}
@@ -454,12 +455,12 @@ export default function QuoteModal({
               disabled={!canNext}
               className="w-full bg-flame font-bold text-white hover:bg-flame-dark disabled:opacity-50"
             >
-              Continue
+              {t.quote.continueBtn}
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
             </Button>
             {services.length === 0 && (
               <p className="mt-2 text-center text-[11px] text-slate-500">
-                Select at least one service to continue
+                {t.quote.selectOne}
               </p>
             )}
           </div>

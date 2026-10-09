@@ -1,12 +1,14 @@
 "use client";
 
 import { COMPLIANCE_BADGES } from "@/lib/b4fire-data";
+import { useLanguage } from "@/components/b4fire/language-context";
 import { Badge } from "@/components/ui/badge";
 import { ShieldCheck, Landmark, FileCheck2, ClipboardCheck } from "lucide-react";
 
 const ICONS = [Landmark, ShieldCheck, FileCheck2, ClipboardCheck];
 
 export default function Compliance() {
+  const { t } = useLanguage();
   return (
     <section
       id="compliance"
@@ -18,30 +20,21 @@ export default function Compliance() {
           {/* left: heading + explanation */}
           <div>
             <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-flame-dark">
-              Regulatory &amp; compliance
+              {t.compliance.eyebrow}
             </p>
             <h2 id="compliance-heading" className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Certificates on the wall. <span className="text-flame-dark">Proof in the paperwork.</span>
+              {t.compliance.hPre}
+              <span className="text-flame-dark">{t.compliance.hHL}</span>
             </h2>
             <p className="mt-4 text-base leading-relaxed text-slate-600">
-              Anyone can claim to be compliant — insurers, auditors and municipal fire marshals only
-              accept <em>documented</em> compliance. Every B4Fire installation and service visit is
-              executed by registered technicians against the governing national standard, and
-              handed over with the certificates, registers and reports that stand up to scrutiny.
+              {t.compliance.p1}
             </p>
             <p className="mt-4 text-base leading-relaxed text-slate-600">
-              We also carry public liability cover and issue certificates of conformity (COC) for
-              electric fencing and system sign-offs, so your building stays audit-ready all year —
-              not just on the day of inspection.
+              {t.compliance.p2}
             </p>
 
             <dl className="mt-8 grid grid-cols-2 gap-4">
-              {[
-                { k: "Registered", v: "PSIRA security provider" },
-                { k: "Certified", v: "SAQCC Fire technicians" },
-                { k: "Documented", v: "SANS test & commissioning reports" },
-                { k: "Insured", v: "Public liability cover" },
-              ].map((item) => (
+              {t.compliance.facts.map((item) => (
                 <div key={item.k} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                   <dt className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-flame-dark">
                     {item.k}
@@ -53,9 +46,10 @@ export default function Compliance() {
           </div>
 
           {/* right: badge cards */}
-          <ul className="grid content-start gap-4 sm:grid-cols-2" aria-label="Compliance registrations and standards">
+          <ul className="grid content-start gap-4 sm:grid-cols-2" aria-label={t.compliance.listAria}>
             {COMPLIANCE_BADGES.map((b, i) => {
               const Icon = ICONS[i % ICONS.length];
+              const copy = t.compliance.byAbbr[b.abbr];
               return (
                 <li
                   key={b.abbr}
@@ -75,9 +69,9 @@ export default function Compliance() {
                       </Badge>
                     </div>
                     <h3 className="mt-4 text-sm font-extrabold leading-snug text-navy-900">
-                      {b.name}
+                      {copy.name}
                     </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-slate-600">{b.detail}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600">{copy.detail}</p>
                   </div>
                 </li>
               );
@@ -86,9 +80,9 @@ export default function Compliance() {
             {/* standards strip card */}
             <li className="rounded-2xl border border-navy-900 bg-navy-900 p-6 sm:col-span-2">
               <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-flame">
-                Standards we work to
+                {t.compliance.standardsTitle}
               </p>
-              <ul className="mt-3 flex flex-wrap gap-2" aria-label="SANS standards list">
+              <ul className="mt-3 flex flex-wrap gap-2" aria-label={t.compliance.standardsAria}>
                 {[
                   "SANS 10139",
                   "SANS 1475",

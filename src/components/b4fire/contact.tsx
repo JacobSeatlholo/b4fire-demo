@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { COMPANY, SERVICES } from "@/lib/b4fire-data";
+import { useLanguage } from "@/components/b4fire/language-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +29,7 @@ import {
 
 export default function Contact() {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -57,14 +59,14 @@ export default function Contact() {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Submission failed. Please try again.");
+      if (!res.ok) throw new Error(data?.error || t.contact.errSubmit);
       setDone(true);
       toast({
-        title: "Message sent",
-        description: `Reference ${data.ref} — we'll call you back within one business day.`,
+        title: t.contact.toastTitle,
+        description: t.contact.toastDesc(data.ref),
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setError(err instanceof Error ? err.message : t.contact.errGeneric);
     } finally {
       setSubmitting(false);
     }
@@ -79,13 +81,12 @@ export default function Contact() {
         <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
           {/* info side */}
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-flame">Contact</p>
+            <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-flame">{t.contact.eyebrow}</p>
             <h2 id="contact-heading" className="mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              Talk to a certified technician today.
+              {t.contact.heading}
             </h2>
             <p className="mt-4 max-w-md text-base leading-relaxed text-slate-400">
-              Request a quote, book a survey, or raise a service call. For life-safety
-              emergencies, always phone the 24/7 line directly.
+              {t.contact.sub}
             </p>
 
             <ul className="mt-8 space-y-4">
@@ -99,7 +100,7 @@ export default function Contact() {
                   </span>
                   <span>
                     <span className="block text-xs font-bold uppercase tracking-wider text-red-300">
-                      24/7 Emergency line
+                      {t.contact.emergencyLabel}
                     </span>
                     <span className="block font-mono text-lg font-extrabold text-white">
                       {COMPANY.phoneDisplay}
@@ -119,10 +120,10 @@ export default function Contact() {
                   </span>
                   <span>
                     <span className="block text-xs font-bold uppercase tracking-wider text-emerald-400">
-                      WhatsApp
+                      {t.contact.whatsappLabel}
                     </span>
                     <span className="block text-sm font-semibold text-white">
-                      Send photos of your site for a faster quote
+                      {t.contact.whatsappSub}
                     </span>
                   </span>
                 </a>
@@ -130,14 +131,14 @@ export default function Contact() {
               <li className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-xl border border-navy-700 bg-navy-800/70 p-4">
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
-                    <Clock className="h-3.5 w-3.5 text-flame" aria-hidden="true" /> Office hours
+                    <Clock className="h-3.5 w-3.5 text-flame" aria-hidden="true" /> {t.contact.officeHours}
                   </span>
-                  <p className="mt-1.5 text-sm font-semibold text-slate-200">Mon–Fri 08:00–17:00</p>
-                  <p className="text-sm font-semibold text-slate-200">Sat 08:00–13:00 (SAST)</p>
+                  <p className="mt-1.5 text-sm font-semibold text-slate-200">{t.contact.hoursL1}</p>
+                  <p className="text-sm font-semibold text-slate-200">{t.contact.hoursL2}</p>
                 </div>
                 <div className="rounded-xl border border-navy-700 bg-navy-800/70 p-4">
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
-                    <Mail className="h-3.5 w-3.5 text-flame" aria-hidden="true" /> Email
+                    <Mail className="h-3.5 w-3.5 text-flame" aria-hidden="true" /> {t.contact.emailLabel}
                   </span>
                   <a href={`mailto:${COMPANY.email}`} className="mt-1.5 block break-all text-sm font-semibold text-slate-200 hover:text-flame">
                     {COMPANY.email}
@@ -146,7 +147,7 @@ export default function Contact() {
               </li>
               <li className="rounded-xl border border-navy-700 bg-navy-800/70 p-4">
                 <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
-                  <MapPin className="h-3.5 w-3.5 text-flame" aria-hidden="true" /> Base of operations
+                  <MapPin className="h-3.5 w-3.5 text-flame" aria-hidden="true" /> {t.contact.baseLabel}
                 </span>
                 <p className="mt-1.5 text-sm font-semibold text-slate-200">{COMPANY.address}</p>
                 <p className="mt-0.5 text-xs text-slate-500">{COMPANY.serviceArea}</p>
@@ -161,10 +162,9 @@ export default function Contact() {
                 <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
                   <CheckCircle2 className="h-8 w-8" aria-hidden="true" />
                 </span>
-                <h3 className="mt-4 text-xl font-extrabold text-white">We&apos;ve got your request</h3>
+                <h3 className="mt-4 text-xl font-extrabold text-white">{t.contact.successTitle}</h3>
                 <p className="mt-2 max-w-sm text-sm text-slate-400">
-                  A certified technician will contact you within one business day. Need it faster?
-                  The 24/7 line is always open.
+                  {t.contact.successBody}
                 </p>
                 <Button
                   variant="outline"
@@ -179,20 +179,20 @@ export default function Contact() {
                     setMessage("");
                   }}
                 >
-                  Send another request
+                  {t.contact.sendAnother}
                 </Button>
               </div>
             ) : (
               <form onSubmit={submit} noValidate={false}>
-                <h3 className="text-lg font-extrabold text-white">Request a callback</h3>
+                <h3 className="text-lg font-extrabold text-white">{t.contact.formTitle}</h3>
                 <p className="mt-1 text-sm text-slate-400">
-                  Average response time: under 2 business hours.
+                  {t.contact.formSub}
                 </p>
 
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   <div className="space-y-1.5">
                     <Label htmlFor="c-name" className="text-xs font-bold text-slate-300">
-                      Full name <span className="text-flame">*</span>
+                      {t.contact.fName} <span className="text-flame">*</span>
                     </Label>
                     <Input
                       id="c-name"
@@ -207,7 +207,7 @@ export default function Contact() {
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="c-phone" className="text-xs font-bold text-slate-300">
-                      Mobile <span className="text-flame">*</span>
+                      {t.contact.fMobile} <span className="text-flame">*</span>
                     </Label>
                     <Input
                       id="c-phone"
@@ -223,7 +223,7 @@ export default function Contact() {
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="c-suburb" className="text-xs font-bold text-slate-300">
-                      Suburb
+                      {t.contact.fSuburb}
                     </Label>
                     <Input
                       id="c-suburb"
@@ -236,7 +236,7 @@ export default function Contact() {
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="c-email" className="text-xs font-bold text-slate-300">
-                      Email
+                      {t.contact.fEmail}
                     </Label>
                     <Input
                       id="c-email"
@@ -250,31 +250,31 @@ export default function Contact() {
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="c-service" className="text-xs font-bold text-slate-300">
-                      Service needed
+                      {t.contact.fService}
                     </Label>
                     <Select value={service} onValueChange={setService}>
                       <SelectTrigger id="c-service" className={`${inputCls} w-full`}>
-                        <SelectValue placeholder="Select a service" />
+                        <SelectValue placeholder={t.contact.selectPlaceholder} />
                       </SelectTrigger>
                       <SelectContent className="border-navy-700 bg-navy-800 text-slate-100">
                         {SERVICES.map((s) => (
                           <SelectItem key={s.key} value={s.key}>
-                            {s.title}
+                            {t.services.byKey[s.key].title}
                           </SelectItem>
                         ))}
-                        <SelectItem value="other">Something else</SelectItem>
+                        <SelectItem value="other">{t.contact.otherService}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5 sm:col-span-2">
                     <Label htmlFor="c-message" className="text-xs font-bold text-slate-300">
-                      How can we assist?
+                      {t.contact.fMessage}
                     </Label>
                     <Textarea
                       id="c-message"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Tell us about your property, what you need, and any deadlines…"
+                      placeholder={t.contact.msgPlaceholder}
                       rows={4}
                       className={`${inputCls} resize-none`}
                     />
@@ -295,18 +295,18 @@ export default function Contact() {
                   {submitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
-                      Sending…
+                      {t.contact.sending}
                     </>
                   ) : (
                     <>
                       <Send className="mr-2 h-4 w-4" aria-hidden="true" />
-                      Request Callback
+                      {t.contact.submit}
                     </>
                   )}
                 </Button>
                 <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[11px] text-slate-500">
                   <Phone className="h-3 w-3" aria-hidden="true" />
-                  Prefer to talk now? Call {COMPANY.phoneDisplay} — a human answers 24/7.
+                  {t.contact.preferCall(COMPANY.phoneDisplay)}
                 </p>
               </form>
             )}

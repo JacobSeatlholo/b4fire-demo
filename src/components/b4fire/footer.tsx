@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { B4FireLogo } from "@/components/b4fire/logo";
 import { useQuote } from "@/components/b4fire/quote-context";
+import { useLanguage } from "@/components/b4fire/language-context";
 import { COMPANY, NAV_LINKS, COMPLIANCE_BADGES, SERVICES } from "@/lib/b4fire-data";
 import {
   ShieldCheck,
@@ -19,6 +20,7 @@ export default function Footer() {
   // Always the current year — fixes the stale © 2024 problem on b4fire.co.za
   const year = new Date().getFullYear();
   const { openQuote } = useQuote();
+  const { t } = useLanguage();
 
   return (
     <footer className="mt-auto border-t border-navy-700/60 bg-navy-950 text-slate-400">
@@ -44,8 +46,8 @@ export default function Footer() {
           <div>
             <B4FireLogo full />
             <p className="mt-4 max-w-xs text-sm leading-relaxed">
-              {COMPANY.tagline}. Registered, documented, and answering the phone 24/7 —
-              from our base in {COMPANY.addressShort}.
+              {t.footer.tagline}. {t.footer.blurbPre}
+              {COMPANY.addressShort}.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-2">
               <a
@@ -63,7 +65,7 @@ export default function Footer() {
                 aria-label="B4Fire Technology on Facebook"
               >
                 <Facebook className="h-4 w-4" aria-hidden="true" />
-                Follow us
+                {t.footer.followUs}
               </a>
             </div>
           </div>
@@ -71,13 +73,13 @@ export default function Footer() {
           {/* nav */}
           <nav aria-label="Footer">
             <h2 className="text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">
-              Explore
+              {t.footer.explore}
             </h2>
             <ul className="mt-4 space-y-2.5">
               {NAV_LINKS.map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="text-sm font-semibold transition-colors hover:text-flame">
-                    {l.label}
+                    {t.nav.labels[l.href]}
                   </Link>
                 </li>
               ))}
@@ -86,7 +88,7 @@ export default function Footer() {
                   onClick={() => openQuote()}
                   className="text-sm font-semibold text-flame transition-colors hover:text-orange-300"
                 >
-                  Get an Instant Quote
+                  {t.footer.quoteLink}
                 </button>
               </li>
             </ul>
@@ -95,13 +97,13 @@ export default function Footer() {
           {/* services + contact */}
           <div>
             <h2 className="text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">
-              Services
+              {t.footer.services}
             </h2>
             <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
               {SERVICES.map((s) => (
                 <li key={s.key}>
                   <Link href="#services" className="text-sm font-semibold transition-colors hover:text-flame">
-                    {s.title}
+                    {t.services.byKey[s.key].title}
                   </Link>
                 </li>
               ))}
@@ -119,7 +121,7 @@ export default function Footer() {
                 {COMPANY.email}
               </a>
               <span className="mt-0.5 block">
-                Mon–Fri 08:00–17:00 · Sat 08:00–13:00 · Emergencies 24/7
+                {t.footer.hoursLine}
               </span>
             </p>
           </div>
@@ -130,15 +132,14 @@ export default function Footer() {
       <div className="border-t border-navy-700/60">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 pt-5 pb-36 text-xs text-slate-500 sm:flex-row sm:px-6 sm:pb-32 lg:px-8">
           <p>
-            © {year} {COMPANY.name}. All rights reserved. PSIRA-registered security service
-            provider.
+            © {year} {COMPANY.name}. {t.footer.rights}
           </p>
           <p className="inline-flex items-center gap-1.5 font-mono">
             <Heart
               className="h-3 w-3 fill-flame text-flame"
               aria-hidden="true"
             />
-            Demo built with passion by{" "}
+            {t.footer.credit}
             <a
               href="https://www.businesshustle.co.za"
               target="_blank"

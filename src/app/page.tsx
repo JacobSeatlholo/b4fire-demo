@@ -1,6 +1,7 @@
 "use client";
 
 import { QuoteProvider } from "@/components/b4fire/quote-context";
+import { LanguageProvider } from "@/components/b4fire/language-context";
 import Navbar from "@/components/b4fire/navbar";
 import Hero from "@/components/b4fire/hero";
 import Services from "@/components/b4fire/services";
@@ -14,21 +15,23 @@ import FloatingActions from "@/components/b4fire/floating-actions";
 
 export default function Home() {
   return (
-    <QuoteProvider>
-      <div className="flex min-h-screen flex-col bg-navy-900">
-        <Navbar />
-        <main id="main" className="flex-1">
-          <Hero />
-          <Services />
-          <Compliance />
-          <Portfolio />
-          <Testimonials />
-          <AboutHours />
-          <Contact />
-        </main>
-        <Footer />
-        <FloatingActions />
-      </div>
-    </QuoteProvider>
+    <LanguageProvider>
+      <QuoteProvider>
+        <div className="flex min-h-screen flex-col bg-navy-900">
+          <Navbar />
+          <main id="main" className="flex-1">
+            <Hero />
+            <Services />
+            <Compliance />
+            <Portfolio />
+            <Testimonials />
+            <AboutHours />
+            <Contact />
+          </main>
+          <Footer />
+          <FloatingActions />
+        </div>
+      </QuoteProvider>
+    </LanguageProvider>
   );
 }

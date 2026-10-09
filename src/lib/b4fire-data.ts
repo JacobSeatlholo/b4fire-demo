@@ -381,6 +381,7 @@ export const CLIENT_TYPES: { key: ClientType | "all"; label: string }[] = [
 ];
 
 export type Project = {
+  key: string;
   title: string;
   clientType: ClientType;
   clientLabel: string;
@@ -392,6 +393,7 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    key: "p1",
     title: "Addressable Detection Upgrade — 4-Storey Office Block",
     clientType: "commercial",
     clientLabel: "Commercial Offices",
@@ -405,6 +407,7 @@ export const PROJECTS: Project[] = [
     year: "2024",
   },
   {
+    key: "p2",
     title: "Warehouse Detection & Extinguisher Fleet",
     clientType: "industrial",
     clientLabel: "Industrial Warehouses",
@@ -418,6 +421,7 @@ export const PROJECTS: Project[] = [
     year: "2023",
   },
   {
+    key: "p3",
     title: "Clean-Agent Gas Suppression — Co-Location Server Room",
     clientType: "server-room",
     clientLabel: "Server Rooms",
@@ -431,6 +435,7 @@ export const PROJECTS: Project[] = [
     year: "2024",
   },
   {
+    key: "p4",
     title: "Mall-Wide Detection, Signage & Emergency Lighting",
     clientType: "retail",
     clientLabel: "Retail",
@@ -444,6 +449,7 @@ export const PROJECTS: Project[] = [
     year: "2023",
   },
   {
+    key: "p5",
     title: "Biometric Access Control — Head Office Fit-Out",
     clientType: "commercial",
     clientLabel: "Commercial Offices",
@@ -457,6 +463,7 @@ export const PROJECTS: Project[] = [
     year: "2025",
   },
   {
+    key: "p6",
     title: "Perimeter Electric Fencing & CCTV — Distribution Yard",
     clientType: "industrial",
     clientLabel: "Industrial Warehouses",

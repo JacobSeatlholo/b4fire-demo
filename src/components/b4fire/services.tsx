@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { SERVICES, SERVICE_CATEGORIES, type ServiceCategory } from "@/lib/b4fire-data";
 import { useQuote } from "@/components/b4fire/quote-context";
+import { useLanguage } from "@/components/b4fire/language-context";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import { Check, ArrowUpRight, BadgeCheck } from "lucide-react";
 export default function Services() {
   const [filter, setFilter] = useState<ServiceCategory | "all">("all");
   const { openQuote } = useQuote();
+  const { t } = useLanguage();
 
   const visible = useMemo(
     () => (filter === "all" ? SERVICES : SERVICES.filter((s) => s.category === filter)),
@@ -24,14 +26,13 @@ export default function Services() {
         {/* heading */}
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-flame">
-            What we do
+            {t.services.eyebrow}
           </p>
           <h2 id="services-heading" className="mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-            One contractor. Every layer of protection.
+            {t.services.heading}
           </h2>
           <p className="mt-4 text-base leading-relaxed text-slate-400">
-            From the first wisp of smoke to the last line of your compliance file — B4Fire designs,
-            installs, certifies and maintains the systems that keep your people and assets safe.
+            {t.services.sub}
           </p>
         </div>
 
@@ -39,7 +40,7 @@ export default function Services() {
         <div
           className="nice-scroll mt-10 flex gap-2 overflow-x-auto pb-2 sm:justify-center sm:pb-0"
           role="tablist"
-          aria-label="Filter services by category"
+          aria-label={t.services.filterAria}
         >
           {SERVICE_CATEGORIES.map((cat) => (
             <button
@@ -54,7 +55,7 @@ export default function Services() {
                   : "border-navy-700 bg-navy-800/70 text-slate-300 hover:border-slate-500 hover:text-white"
               )}
             >
-              {cat.label}
+              {t.services.cats[cat.key]}
             </button>
           ))}
         </div>
@@ -64,6 +65,7 @@ export default function Services() {
           {visible.map((s) => {
             const Icon = s.icon;
             const isFlame = s.accent === "flame";
+            const copy = t.services.byKey[s.key];
             return (
               <article
                 key={s.key}
@@ -99,12 +101,12 @@ export default function Services() {
                 </div>
 
                 <h3 className="mt-4 text-lg font-extrabold tracking-tight text-white">
-                  {s.title}
+                  {copy.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">{s.blurb}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-400">{copy.blurb}</p>
 
                 <ul className="mt-4 space-y-2">
-                  {s.items.map((item) => (
+                  {copy.items.map((item) => (
                     <li key={item} className="flex items-start gap-2 text-sm text-slate-300">
                       <Check
                         className={cn("mt-0.5 h-4 w-4 shrink-0", isFlame ? "text-flame" : "text-red-400")}
@@ -123,9 +125,9 @@ export default function Services() {
                       "inline-flex items-center gap-1.5 px-0 text-sm font-bold hover:bg-transparent",
                       isFlame ? "text-flame hover:text-orange-300" : "text-red-400 hover:text-red-300"
                     )}
-                    aria-label={`Request a quote for ${s.title}`}
+                    aria-label={`${t.services.quoteAriaPre}${copy.title}`}
                   >
-                    Quote this service
+                    {t.services.quoteThis}
                     <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
                   </Button>
                 </div>
@@ -137,7 +139,7 @@ export default function Services() {
         {/* compliance nudge */}
         <p className="mt-8 flex flex-wrap items-center justify-center gap-2 text-center text-sm text-slate-500">
           <BadgeCheck className="h-4 w-4 text-emerald-400" aria-hidden="true" />
-          Every install is commissioned against its governing SANS standard and handed over with documentation your insurer will accept.
+          {t.services.nudge}
         </p>
       </div>
     </section>

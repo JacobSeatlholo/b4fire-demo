@@ -1,4 +1,7 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/b4fire/language-context";
 
 /**
  * B4Fire brand mark — shield with an integrated flame.
@@ -52,6 +55,7 @@ export function B4FireLogo({
   /** Always render the full lockup (used in footer/sheet). Header auto-compacts below 2xl. */
   full?: boolean;
 }) {
+  const { t } = useLanguage();
   return (
     <span className={cn("flex items-center gap-2.5", className)}>
       <FlameShieldMark />
@@ -73,7 +77,7 @@ export function B4FireLogo({
             full ? "block" : "hidden 2xl:block"
           )}
         >
-          Fire · Security · Compliance
+          {t.logo.tagline}
         </span>
       </span>
     </span>

@@ -12,6 +12,7 @@ experience focused on trust signals and instant lead capture.
 
 | Section | Highlights |
 |---|---|
+| **Bilingual EN / Afrikaans** | One-click **EN \| AFR** toggle in the navbar (and mobile menu) — every string, all 14 services, portfolio, testimonials, forms and the quote wizard are fully translated. Choice persists in `localStorage`, `<html lang>` follows (`en-ZA` / `af-ZA`). |
 | Sticky navigation | Flame/shield brand mark, 24/7 Emergency pill (`061 686 0234`), WhatsApp quick action, scroll-aware active links, mobile sheet menu |
 | Hero | Certified headline, Instant Quote CTA, emergency response CTA, animated key-stats bar (24/7, 100% SANS compliant, …) |
 | Instant Quote Calculator | 2-step interactive wizard: services → property type, area slider, urgency → **live ZAR budget estimate** → lead capture with reference number (persisted via API) |
