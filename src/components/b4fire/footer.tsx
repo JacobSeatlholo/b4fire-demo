@@ -12,6 +12,7 @@ import {
   Mail,
   Clock,
   MessageCircle,
+  Heart,
 } from "lucide-react";
 
 export default function Footer() {
@@ -127,13 +128,25 @@ export default function Footer() {
 
       {/* legal bar — dynamic year */}
       <div className="border-t border-navy-700/60">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-slate-500 sm:flex-row sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 pt-5 pb-36 text-xs text-slate-500 sm:flex-row sm:px-6 sm:pb-32 lg:px-8">
           <p>
             © {year} {COMPANY.name}. All rights reserved. PSIRA-registered security service
             provider.
           </p>
-          <p className="font-mono">
-            Demo site — b4fire.co.za redesign concept · Built with Next.js
+          <p className="inline-flex items-center gap-1.5 font-mono">
+            <Heart
+              className="h-3 w-3 fill-flame text-flame"
+              aria-hidden="true"
+            />
+            Demo built with passion by{" "}
+            <a
+              href="https://www.businesshustle.co.za"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-flame underline-offset-2 transition-colors hover:text-orange-300 hover:underline"
+            >
+              BusinessHustle
+            </a>
           </p>
         </div>
       </div>
