@@ -31,6 +31,7 @@ export default function Contact() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [suburb, setSuburb] = useState(""); // real field on the b4fire.co.za enquiry form
   const [service, setService] = useState<string>("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -49,6 +50,7 @@ export default function Contact() {
           name,
           phone,
           email: email || undefined,
+          suburb: suburb || undefined, // captured like the real enquiry form
           services: service ? [service] : [],
           message: message || undefined,
           source: "contact_form",
@@ -172,6 +174,7 @@ export default function Contact() {
                     setName("");
                     setPhone("");
                     setEmail("");
+                    setSuburb("");
                     setService("");
                     setMessage("");
                   }}
@@ -219,6 +222,19 @@ export default function Contact() {
                     />
                   </div>
                   <div className="space-y-1.5">
+                    <Label htmlFor="c-suburb" className="text-xs font-bold text-slate-300">
+                      Suburb
+                    </Label>
+                    <Input
+                      id="c-suburb"
+                      value={suburb}
+                      onChange={(e) => setSuburb(e.target.value)}
+                      placeholder="Kuils River"
+                      className={inputCls}
+                      autoComplete="address-level3"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
                     <Label htmlFor="c-email" className="text-xs font-bold text-slate-300">
                       Email
                     </Label>
@@ -252,7 +268,7 @@ export default function Contact() {
                   </div>
                   <div className="space-y-1.5 sm:col-span-2">
                     <Label htmlFor="c-message" className="text-xs font-bold text-slate-300">
-                      How can we help?
+                      How can we assist?
                     </Label>
                     <Textarea
                       id="c-message"

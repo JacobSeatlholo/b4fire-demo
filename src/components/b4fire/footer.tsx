@@ -3,11 +3,20 @@
 import Link from "next/link";
 import { B4FireLogo } from "@/components/b4fire/logo";
 import { useQuote } from "@/components/b4fire/quote-context";
-import { COMPANY, NAV_LINKS, SERVICES, COMPLIANCE_BADGES } from "@/lib/b4fire-data";
-import { ShieldCheck, Phone } from "lucide-react";
+import { COMPANY, NAV_LINKS, COMPLIANCE_BADGES, SERVICES } from "@/lib/b4fire-data";
+import {
+  ShieldCheck,
+  Phone,
+  Facebook,
+  MapPin,
+  Mail,
+  Clock,
+  MessageCircle,
+} from "lucide-react";
 
 export default function Footer() {
-  const year = new Date().getFullYear(); // always current — fixes the stale "2024" problem
+  // Always the current year — fixes the stale © 2024 problem on b4fire.co.za
+  const year = new Date().getFullYear();
   const { openQuote } = useQuote();
 
   return (
@@ -34,16 +43,28 @@ export default function Footer() {
           <div>
             <B4FireLogo full />
             <p className="mt-4 max-w-xs text-sm leading-relaxed">
-              Certified fire protection and electronic security for Cape Town and the Western
-              Cape. Registered, documented, and answering the phone 24/7.
+              {COMPANY.tagline}. Registered, documented, and answering the phone 24/7 —
+              from our base in {COMPANY.addressShort}.
             </p>
-            <a
-              href={`tel:${COMPANY.phoneIntl}`}
-              className="mt-5 inline-flex items-center gap-2 rounded-full bg-alert px-4 py-2 text-sm font-extrabold text-white transition-colors hover:bg-alert-dark"
-            >
-              <Phone className="h-4 w-4" aria-hidden="true" />
-              24/7: {COMPANY.phoneDisplay}
-            </a>
+            <div className="mt-5 flex flex-wrap items-center gap-2">
+              <a
+                href={`tel:${COMPANY.emergencyIntl}`}
+                className="inline-flex items-center gap-2 rounded-full bg-alert px-4 py-2 text-sm font-extrabold text-white transition-colors hover:bg-alert-dark"
+              >
+                <Phone className="h-4 w-4" aria-hidden="true" />
+                24/7: {COMPANY.emergencyDisplay}
+              </a>
+              <a
+                href={COMPANY.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-navy-700 bg-navy-800 px-4 py-2 text-sm font-bold text-slate-200 transition-colors hover:border-blue-500 hover:text-blue-400"
+                aria-label="B4Fire Technology on Facebook"
+              >
+                <Facebook className="h-4 w-4" aria-hidden="true" />
+                Follow us
+              </a>
+            </div>
           </div>
 
           {/* nav */}
@@ -70,7 +91,7 @@ export default function Footer() {
             </ul>
           </nav>
 
-          {/* services */}
+          {/* services + contact */}
           <div>
             <h2 className="text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">
               Services
@@ -84,10 +105,21 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-            <p className="mt-6 text-sm">
+            <p className="mt-6 space-y-1 text-sm">
               <span className="block font-semibold text-slate-300">{COMPANY.address}</span>
-              <span className="mt-0.5 block">{COMPANY.email}</span>
-              <span className="mt-0.5 block">Mon–Fri 08:00–17:00 · Sat 08:00–13:00 · Emergencies 24/7</span>
+              <span className="mt-0.5 block">
+                Tel: {COMPANY.phoneDisplay} / {COMPANY.phoneAltDisplay}
+              </span>
+              <span className="mt-0.5 block">WhatsApp: {COMPANY.whatsappDisplay}</span>
+              <a
+                href={`mailto:${COMPANY.email}`}
+                className="mt-0.5 block transition-colors hover:text-flame"
+              >
+                {COMPANY.email}
+              </a>
+              <span className="mt-0.5 block">
+                Mon–Fri 08:00–17:00 · Sat 08:00–13:00 · Emergencies 24/7
+              </span>
             </p>
           </div>
         </div>

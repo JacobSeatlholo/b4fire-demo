@@ -113,18 +113,19 @@ export default function Navbar() {
             WhatsApp
           </a>
 
-          {/* Emergency pill */}
+          {/* Emergency pill — Phillip's real 24/7 line from b4fire.co.za */}
           <a
-            href={`tel:${COMPANY.phoneIntl}`}
+            href={`tel:${COMPANY.emergencyIntl}`}
             className="group inline-flex h-10 shrink-0 items-center gap-2 whitespace-nowrap rounded-full bg-alert px-3.5 text-sm font-bold text-white shadow-[0_4px_20px_-4px_rgba(220,38,38,0.6)] transition-all hover:bg-alert-dark focus-visible:outline-2 focus-visible:outline-red-400 sm:px-4"
-            aria-label={`24/7 emergency line: ${COMPANY.phoneDisplay}`}
+            aria-label={`24/7 emergency line (${COMPANY.emergencyName}): ${COMPANY.emergencyDisplay}`}
+            title="24/7 Emergency — Phillip"
           >
             <span className="relative flex h-2 w-2" aria-hidden="true">
               <span className="absolute inline-flex h-full w-full animate-pulse-dot rounded-full bg-white" />
             </span>
             <Phone className="h-4 w-4 transition-transform group-hover:rotate-12" aria-hidden="true" />
             <span className="hidden xl:inline">24/7 Emergency</span>
-            <span className="font-mono tracking-tight">{COMPANY.phoneDisplay}</span>
+            <span className="font-mono tracking-tight">{COMPANY.emergencyDisplay}</span>
           </a>
 
           {/* Quote CTA */}
@@ -190,11 +191,18 @@ export default function Navbar() {
                   WhatsApp Us
                 </a>
                 <a
-                  href={`tel:${COMPANY.phoneIntl}`}
+                  href={`tel:${COMPANY.emergencyIntl}`}
                   className="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-alert text-sm font-bold text-white"
                 >
                   <Phone className="h-4 w-4" aria-hidden="true" />
-                  24/7 Emergency · {COMPANY.phoneDisplay}
+                  24/7 Emergency · {COMPANY.emergencyDisplay}
+                </a>
+                <a
+                  href={`tel:${COMPANY.phoneIntl}`}
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-md border border-navy-700 bg-navy-800 text-sm font-bold text-slate-200"
+                >
+                  <Phone className="h-4 w-4" aria-hidden="true" />
+                  Office · {COMPANY.phoneDisplay}
                 </a>
               </div>
             </SheetContent>

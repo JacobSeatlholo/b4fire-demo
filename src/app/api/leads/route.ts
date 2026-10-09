@@ -18,6 +18,7 @@ type LeadPayload = {
   phone?: string;
   email?: string;
   company?: string;
+  suburb?: string; // real field on b4fire.co.za contact form
   services?: string[];
   propertyType?: string;
   sizeSqm?: number;
@@ -47,14 +48,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "That email address looks invalid." }, { status: 400 });
     }
 
-    // indicative estimate (ZAR) for quote-modal submissions
+    // indicative estimate (ZAR) for quote-modal submissions — matches QUOTE_BASE in lib/b4fire-data
     const RATES: Record<string, [number, number]> = {
       detection: [8500, 68000],
       suppression: [42000, 210000],
-      equipment: [1200, 14500],
-      stopping: [9500, 85000],
+      evacuation: [9500, 78000],
+      alarms: [3800, 42000],
+      cctv: [6500, 85000],
       access: [7500, 62000],
+      "boom-gates": [8500, 58000],
       perimeter: [15000, 98000],
+      stopping: [9500, 85000],
+      "fire-doors": [6500, 54000],
+      equipment: [1200, 14500],
+      signage: [850, 9800],
+      "first-aid": [650, 7800],
+      ppe: [950, 12500],
     };
     const PROPERTY: Record<string, number> = {
       office: 1,
@@ -93,6 +102,7 @@ export async function POST(req: Request) {
         phone,
         email: body.email || null,
         company: body.company || null,
+        suburb: body.suburb?.trim() || null,
         services: services.join(","),
         propertyType: body.propertyType || null,
         sizeSqm: Number.isFinite(body.sizeSqm) ? Math.round(body.sizeSqm!) : null,

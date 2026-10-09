@@ -97,13 +97,14 @@ export default function Hero() {
             id="hero-heading"
             className="text-4xl font-extrabold leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-[3.4rem]"
           >
-            Certified <span className="text-flame-gradient">Fire Protection</span> &amp; Electronic
-            Security Solutions.
+            Certified <span className="text-flame-gradient">Fire &amp; Security</span> Protection for
+            Business and Home.
           </h1>
 
           <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
             SANS &amp; SAQCC compliant fire detection, gas suppression, access control, and
-            maintenance for <span className="font-semibold text-slate-100">Cape Town &amp; beyond</span>.
+            maintenance for <span className="font-semibold text-slate-100">Cape Town &amp; the Western Cape</span> —
+            one accountable contractor for fire and electronic security.
           </p>
 
           {/* trust chips */}

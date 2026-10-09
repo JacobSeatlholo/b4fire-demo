@@ -16,8 +16,9 @@ model Lead {
   phone        String
   email        String?
   company      String?
+  suburb       String? // area/suburb from the contact form (real field on b4fire.co.za)
   services     String // comma-separated service keys selected in the quote wizard
-  propertyType String?
+  propertyType String? // office | warehouse | server | retail | residential
   sizeSqm      Int?
   urgency      String? // "emergency" | "urgent" | "planning"
   estimateMin  Int? // estimated budget range lower bound (ZAR)
